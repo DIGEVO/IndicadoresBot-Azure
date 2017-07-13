@@ -27,35 +27,25 @@ bot.dialog('/', [
         //ver la hora del usuario y saludarlo apropidamente...
         builder.Prompts.choice(session,
             `Hola ${session.message.user.name}, ¿cuál acción desea realizar?`,
-            'Comparar valor de indicador|Conocer valor de indicador', { listStyle: builder.ListStyle.button });
+            'Comparar valor de indicador|Conocer valor de indicador',
+            { listStyle: builder.ListStyle.button });
     },
     function (session, result) {
         session.dialogData.opcion = result.response.entity;
         builder.Prompts.choice(session, '¿Cuál de los siguientes indicadores deseas conocer?',
-            ['Unidad de fomento', 'Indice de valor promedio',
-                'Dólar observado', ' Dólar acuerdo', 'Euro',
-                'Índice de Precios al Consumidor',
-                'Unidad Tributaria Mensual', 'Imacec',
-                'Tasa Política Monetaria',
-                'Libra de Cobre', 'Tasa de desempleo'].join('|'),
+            Indicators.join('|'),
             { listStyle: builder.ListStyle.list });
     },
     function (session, results) {
         session.dialogData.indicador = results.response.entity;
-        builder.Prompts.time(session, `¿De cuál fecha desea ${session.dialogData.opcion.toLowerCase()}?`);
+        builder.Prompts.time(session,
+            `¿De cuál fecha desea ${session.dialogData.opcion.toLowerCase()}?`);
     },
     function (session, results) {
         //buscar la forma de traducir los resultados a español
         session.dialogData.fecha = builder.EntityRecognizer.resolveTime([results.response]);
 
-        let now = new Date();
-
-        let fecha = session.dialogData.fecha;
-        fecha.setHours(0);
-        fecha.setMinutes(0);
-        fecha.setSeconds(0);
-        fecha.setMilliseconds(0);
-        if (fecha.getTime() > now.getTime()) {
+        if (getDateWithoutTime(session.dialogData.fecha) > new Date().getTime()) {
             session.endDialog(`Uff! desea predecir y ${session.dialogData.opcion.toLowerCase()} **${session.dialogData.indicador}**, 
         de la fecha **${session.dialogData.fecha.toDateString()}**`);
         } else {
@@ -81,4 +71,11 @@ if (useEmulator) {
     module.exports = { default: connector.listen() }
 }
 
+const Indicators = ['Unidad de fomento', 'Indice de valor promedio',
+    'Dólar observado', ' Dólar acuerdo', 'Euro',
+    'Índice de Precios al Consumidor',
+    'Unidad Tributaria Mensual', 'Imacec',
+    'Tasa Política Monetaria',
+    'Libra de Cobre', 'Tasa de desempleo'];
 
+const getDateWithoutTime = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
