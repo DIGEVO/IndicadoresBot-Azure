@@ -6,7 +6,7 @@ module.exports = {
 
     toCompareValue(session) { },
 
-    toKnowValue(session) {
+    toKnowValue(session, funs) {
         const indicador = this._Indicators[session.dialogData.indicador];
         const fecha = this._formatDate(session.dialogData.fecha);
         const url = `http://mindicador.cl/api/${indicador}/${fecha}`;
@@ -14,12 +14,11 @@ module.exports = {
         httpService.get(url)
             .then(function gotData(data) {
                 const result = JSON.parse(data);
-                session.endDialog(`El indicador **${session.dialogData.indicador}** 
-                para la fecha **${fecha}** es 
-                **${result.serie.length != 0 ? result.serie[0].valor : "No existe valor para ese día"}**`);
+                session.send(`El indicador **${session.dialogData.indicador}** para la fecha **${fecha}** es **${result.serie.length != 0 ? result.serie[0].valor : "No existe valor en la fecha indicada"}**`);
+                funs.forEach(f => f());
             })
             .catch(function (error) {
-                session.endDialog(`Lo sentimos, ha ocurrido el sgte error **${error}**`);
+                session.send(`Lo sentimos, ha ocurrido el sgte error **${error}**`);
             });
     },
 
@@ -29,9 +28,9 @@ module.exports = {
 
     _Indicators: {
         'Unidad de fomento': 'uf',
-        'Indice de valor promedio': 'ivp',
+        'Índice de valor promedio': 'ivp',
         'Dólar observado': 'dolar',
-        ' Dólar acuerdo': 'dolar_intercambio',
+        'Dólar acuerdo': 'dolar_intercambio',
         'Euro': 'euro',
         'Índice de Precios al Consumidor': 'ipc',
         'Unidad Tributaria Mensual': 'utm',

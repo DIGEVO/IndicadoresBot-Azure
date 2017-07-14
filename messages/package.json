@@ -1,7 +1,7 @@
 {
-  "name": "emptybot",
-  "version": "1.0.0",
-  "description": "",
+  "name": "indicadoresbot",
+  "version": "2.0.0",
+  "description": "Bot to get indicators from http://mindicador.cl/",
   "main": "index.js",
   "dependencies": {
     "azure-storage": "^2.0.0",
@@ -16,6 +16,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Rigoberto Leander Salgado Reyes",
+  "license": "ISC",
+  "engines": {
+    "node" : ">=0.7.0"
+  }
 }
