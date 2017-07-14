@@ -1,4 +1,5 @@
 {
+  "entryPoint" : "Logic.chooseAction",
   "disabled": false,
   "bindings": [
     {
@@ -12,6 +13,5 @@
       "direction": "out",
       "name": "res"
     }
-  ],
-  "entryPoint" : "chooseAction"
+  ]
 }
