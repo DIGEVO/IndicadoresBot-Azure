@@ -1,5 +1,5 @@
 {
-  "entryPoint" : "Logic.chooseAction",
+  "entryPoint" : "index",
   "disabled": false,
   "bindings": [
     {
